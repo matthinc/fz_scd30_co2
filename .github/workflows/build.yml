@@ -3,7 +3,7 @@ on: [push, pull_request]
 jobs:
   ufbt-build-action:
     runs-on: ubuntu-latest
-    name: 'ufbt: Build for Dev branch'
+    name: 'ufbt build'
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -12,7 +12,7 @@ jobs:
         id: build-app
         with:
           # Set to 'release' to build for latest published release version
-          sdk-channel: dev
+          sdk-channel: release
       - name: Upload app artifacts
         uses: actions/upload-artifact@v3
         with:
