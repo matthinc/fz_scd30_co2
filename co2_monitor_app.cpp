@@ -21,6 +21,24 @@ struct CO2Monitor {
     std::string last_data_ts;
 };
 
+static void update_led(int co2_level) {
+    int r = 0;
+    int g = 0;
+
+    if (co2_level < 500) {
+        g = 0xFF;
+    } else if (co2_level > 2500) {
+        r = 0xFF;
+    } else {
+        r = ((co2_level - 500.0) / 2000.0) * 0xFF;
+        g = 0xFF - r;
+    }
+
+    furi_hal_light_set(LightRed, r);
+    furi_hal_light_set(LightGreen, g);
+    furi_hal_light_set(LightBlue, 0);
+}
+
 static void progress_bar(Canvas* canvas, int x, int y, int w, int progress, int max) {
     if (progress < 0) {
         progress = 0;
@@ -38,10 +56,10 @@ static void draw_callback(Canvas* canvas, void* ctx) {
     int temp = static_cast<int>(context->data.temperature);
     int hum = static_cast<int>(context->data.humidity);
 
+    update_led(co2);
+
     int width = canvas_width(canvas);
     int center = width / 2;
-
-    furi_hal_light_set(LightBlue, 0xFF);
 
     canvas_clear(canvas);
 
