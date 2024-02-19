@@ -25,9 +25,9 @@ static void update_led(int co2_level) {
     int r = 0;
     int g = 0;
 
-    if (co2_level < 500) {
+    if(co2_level < 500) {
         g = 0xFF;
-    } else if (co2_level > 2500) {
+    } else if(co2_level > 2500) {
         r = 0xFF;
     } else {
         r = ((co2_level - 500.0) / 2000.0) * 0xFF;
@@ -40,9 +40,9 @@ static void update_led(int co2_level) {
 }
 
 static void progress_bar(Canvas* canvas, int x, int y, int w, int progress, int max) {
-    if (progress < 0) {
+    if(progress < 0) {
         progress = 0;
-    } else if (progress > max) {
+    } else if(progress > max) {
         progress = max;
     }
     canvas_draw_rframe(canvas, x, y, w, 7, 2);
@@ -73,7 +73,13 @@ static void draw_callback(Canvas* canvas, void* ctx) {
 
     // Temp / humidity
     canvas_set_font(canvas, FontSecondary);
-    canvas_draw_str_aligned(canvas, center, 55, AlignCenter, AlignTop, (std::to_string(temp) + " C, " + std::to_string(hum) + " %").c_str());
+    canvas_draw_str_aligned(
+        canvas,
+        center,
+        55,
+        AlignCenter,
+        AlignTop,
+        (std::to_string(temp) + " C, " + std::to_string(hum) + " %").c_str());
 }
 
 static void input_callback(InputEvent* input, void* ctx) {
@@ -120,10 +126,10 @@ extern "C" int32_t co2_monitor_app(void* p) {
             }
         }
 
-        if (scd30_worker.has_data()) {
+        if(scd30_worker.has_data()) {
             SCD30Data new_data = scd30_worker.get_data();
 
-            if (co2_monitor->last_data_ts != new_data.ts) {
+            if(co2_monitor->last_data_ts != new_data.ts) {
                 co2_monitor->data = new_data;
                 co2_monitor->last_data_ts = new_data.ts;
 
@@ -138,7 +144,7 @@ extern "C" int32_t co2_monitor_app(void* p) {
 
         view_port_update(co2_monitor->view_port);
     }
-    
+
     scd30_worker.stop();
 
     gui_remove_view_port(co2_monitor->gui, co2_monitor->view_port);

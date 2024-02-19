@@ -2,7 +2,8 @@
 
 #include <sstream>
 
-CsvWriter::CsvWriter(std::string filename) : filename(std::move(filename)) {
+CsvWriter::CsvWriter(std::string filename)
+    : filename(std::move(filename)) {
     storage = reinterpret_cast<Storage*>(furi_record_open(RECORD_STORAGE));
     file = storage_file_alloc(storage);
 }
@@ -13,22 +14,22 @@ CsvWriter::~CsvWriter() {
 }
 
 bool CsvWriter::add_row(std::vector<std::string> data) {
-    if (!storage_file_open(file, filename.c_str(), FSAM_WRITE, FSOM_OPEN_APPEND)) {
+    if(!storage_file_open(file, filename.c_str(), FSAM_WRITE, FSOM_OPEN_APPEND)) {
         return false;
     }
 
     std::string row;
 
-    for (uint32_t i = 0; i < data.size(); i++) {
+    for(uint32_t i = 0; i < data.size(); i++) {
         row += data[i];
-        if (i == data.size() - 1) {
+        if(i == data.size() - 1) {
             row += "\n";
         } else {
             row += ",";
         }
     }
 
-    if (!storage_file_write(file, row.c_str(), row.size())) {
+    if(!storage_file_write(file, row.c_str(), row.size())) {
         return false;
     }
 

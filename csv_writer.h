@@ -14,6 +14,6 @@ public:
 
 private:
     std::string filename;
-    Storage *storage;
-    File *file;
+    Storage* storage;
+    File* file;
 };
