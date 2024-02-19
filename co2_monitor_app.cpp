@@ -147,6 +147,11 @@ extern "C" int32_t co2_monitor_app(void* p) {
 
     scd30_worker.stop();
 
+    // Turn off LED
+    furi_hal_light_set(LightRed, 0);
+    furi_hal_light_set(LightGreen, 0);
+    furi_hal_light_set(LightBlue, 0);
+
     gui_remove_view_port(co2_monitor->gui, co2_monitor->view_port);
     view_port_free(co2_monitor->view_port);
     furi_record_close("gui");

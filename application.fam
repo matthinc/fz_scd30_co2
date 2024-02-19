@@ -7,6 +7,6 @@ App(
     requires=["gui"],
     stack_size=1 * 1024,
     order=20,
-    fap_icon="co2_monitor_10px.png",
+    fap_icon="co2.png",
     fap_category="Tools",
 )
