@@ -17,25 +17,21 @@ bool CsvWriter::add_row(std::vector<std::string> data) {
         return false;
     }
 
-    std::string ss;
+    std::string row;
 
     for (uint32_t i = 0; i < data.size(); i++) {
-        std::string& element = data[i];
-
-        ss += element;
-        
+        row += data[i];
         if (i == data.size() - 1) {
-            ss += "\n";
+            row += "\n";
         } else {
-            ss += ",";
+            row += ",";
         }
     }
 
-    if (!storage_file_write(file, ss.c_str(), ss.size())) {
+    if (!storage_file_write(file, row.c_str(), row.size())) {
         return false;
     }
 
     storage_file_close(file);
-
     return true;
 }
