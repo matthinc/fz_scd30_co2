@@ -75,11 +75,13 @@ static void draw_callback(Canvas* canvas, void* ctx) {
     canvas_set_font(canvas, FontSecondary);
     canvas_draw_str_aligned(
         canvas,
-        center,
+        5,
         55,
-        AlignCenter,
+        AlignLeft,
         AlignTop,
-        (std::to_string(temp) + " C, " + std::to_string(hum) + " %").c_str());
+        (std::to_string(temp) + " C, " + std::to_string(hum) + " % - Hold UP to calib.").c_str());
+
+    // Info
 }
 
 static void input_callback(InputEvent* input, void* ctx) {
@@ -115,14 +117,11 @@ extern "C" int32_t co2_monitor_app(void* p) {
     while(running) {
         FuriStatus status = furi_message_queue_get(co2_monitor->event_queue, &event, 100);
         if(status == FuriStatusOk) {
-            if(event.type == InputTypePress) {
-                switch(event.key) {
-                case InputKeyBack:
-                    running = false;
-                    break;
-                default:
-                    break;
-                }
+            if(event.type == InputTypePress && event.key == InputKeyBack) {
+                running = false;
+            } else if(event.type == InputTypeLong && event.key == InputKeyUp) {
+                // Calibrate to 420ppm (average outside value)
+                scd30_worker.calibrate_to(420);
             }
         }
 

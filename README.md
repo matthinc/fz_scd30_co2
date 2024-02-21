@@ -13,10 +13,11 @@ CO2 monitor and data logger for Flipper Zero. This started as a port of https://
 ## Features
 
 - Displays CO2, Temperature, Humidity
-- Permanent logging to a CSV file
+- Continous logging to a CSV file
 - LED Color based on current CO2 level (500 = green ... 2500 = red)
 - Bar graph (0 ... 3000ppm)
-
-## TODOs
-
 - Calibration
+
+## Calibrate sensor
+
+Place the sensor outside for at least 5 minutes - push and hold the "UP" button. The CO2 sensor will calibrate to 420 ppm.

@@ -60,6 +60,10 @@ bool FlipperSCD30::set_interval(uint16_t interval) {
     return send_command({0x46, 0x00}, {UINT16_MSBS(interval), UINT16_LSBS(interval)});
 }
 
+bool FlipperSCD30::calibrate(uint16_t calibration) {
+    return send_command({0x52, 0x04}, {UINT16_MSBS(calibration), UINT16_LSBS(calibration)});
+}
+
 SCD30Data FlipperSCD30::read_measurements() {
     SCD30Data result;
     uint8_t buffer[18];
@@ -97,6 +101,11 @@ static int32_t run(void* context) {
             worker_context->data_available = true;
         }
 
+        if(worker_context->next_calibration != 0) {
+            worker_context->scd30.calibrate(worker_context->next_calibration);
+            worker_context->next_calibration = 0;
+        }
+
         furi_delay_ms(worker_context->interval);
     }
 
@@ -124,6 +133,10 @@ void FlipperSCD30WorkerThread::stop() {
 void FlipperSCD30WorkerThread::start() {
     running = true;
     furi_thread_start(thread);
+}
+
+void FlipperSCD30WorkerThread::calibrate_to(uint16_t ppm) {
+    next_calibration = ppm;
 }
 
 bool FlipperSCD30WorkerThread::has_data() {

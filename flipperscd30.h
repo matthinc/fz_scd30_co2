@@ -27,6 +27,7 @@ public:
 
     bool start_measurement();
     bool set_interval(uint16_t interval);
+    bool calibrate(uint16_t calibration);
 
     SCD30Data read_measurements();
 };
@@ -39,10 +40,13 @@ public:
     void stop();
     void start();
 
+    void calibrate_to(uint16_t ppm);
+
     SCD30Data get_data();
     bool has_data();
 
     int interval;
+    uint16_t next_calibration = 0;
     bool running = false;
     bool data_available = false;
     FuriThread* thread;
